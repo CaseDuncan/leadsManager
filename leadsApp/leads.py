@@ -12,6 +12,6 @@ leads = [
         "id": "2",
         "name": "Michael Owen",
         "email": "michaelowen@gmail.com",
-        "message": "i'll advise to choose computer science"
+        "message": "i'll advise you to choose computer science"
     }
 ]

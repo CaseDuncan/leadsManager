@@ -2,7 +2,9 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from leadsApp.models import Lead
-from .leads import leads
+
+
+from leadsApp.serializers import LeadSerializer
 
 # Create your views here.
 
@@ -28,8 +30,9 @@ view for get a list of all leads
 
 @api_view(['GET'])
 def getLeads(request):
-    # leads = Lead.objects.all()
-    return Response(leads)
+    leads = Lead.objects.all()
+    serializer = LeadSerializer(leads, many=True)
+    return Response(serializer.data)
 
 
 """
@@ -39,9 +42,14 @@ view for get a single lead
 
 @api_view(['GET'])
 def getLead(request, pk):
-    lead = None
-    for i in leads:
-        if i['id'] == pk:
-            lead = i
-            break
-    return Response(lead)
+    lead = Lead.objects.get(id=pk)
+    serializer = LeadSerializer(lead, many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def addLead(request):
+    if request.method == 'POST':
+        serializer = LeadSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
